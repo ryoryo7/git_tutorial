@@ -1,0 +1,162 @@
+
+trump10 = [1,2,3,4,5,6,7,8,9,10,10,10,10]
+marks= ["♡","♢","♤","♧"]
+mark = marks.sample
+
+
+
+puts "ブラックジャックを始めます"
+
+puts "ディーラー1枚目オープン"
+dealer =  trump10.sample
+puts "ディーラーの1枚目のカードは#{marks.sample}の#{dealer}です"
+
+
+#ここからプレイヤーゾーン↓
+puts "プレイヤー1枚目オープン"
+  player= trump10.sample
+   puts  "#{marks.sample}の#{player}"
+ 
+puts "プレイヤー2枚目オープン"
+  player2= trump10.sample
+   puts  "#{marks.sample}の#{player2}"
+
+puts "プレイヤーの合計値は#{player + player2}です"
+puts "プレイヤーはもう一枚カードを引きますか？（Yes=y or No=n）"
+  choose = gets.chomp
+  
+if choose == "N" || choose == "n"
+   puts "プレイヤーの合計値は#{player + player2}で終了しました"
+   end
+player_answer = player + player2
+
+
+if choose == "Y" || choose == "y"
+    player3  = trump10.sample
+puts "プレイヤーの次のカードは#{marks.sample}の#{player3}です" 
+player3a = player3 
+end
+
+while   choose == "Y" || choose == "y"
+puts "プレイヤーの合計値は#{player + player2 + player3}になりました"
+player_answer = player + player2 + player3
+if  player + player2 + player3 > 21
+puts "プレイヤーはバーストした為、勝負に負けました"
+exit
+end
+puts "プレイヤーはもう一枚カードを引きますか？（Yes=y or No=n）"
+  choose = gets.chomp
+p_point = player3
+  player3 += trump10.sample
+if   choose == "Y" || choose == "y"
+puts "プレイヤーの次のカードは#{marks.sample}の#{player3 - p_point}です" 
+nextcard = player3 - p_point
+elsif choose == "N" || choose == "n"
+puts "プレイヤーの合計値は#{player_answer}で終了します"
+puts "プレイヤーのターン終了"
+end
+end
+
+#ここまでプレイヤーゾーン↑
+
+#ここからはエース対策（1or11）↓
+
+
+p_ace = player == 1 || player2 == 1 || player3 == 1 || player3a == 1 ||nextcard  == 1 
+if p_ace
+puts "エースの値をどちらか選んで下さい　1or11"
+ ace= gets.chomp.to_i
+  end
+
+if ace == 11
+player_answer += 10
+puts "改め、プレイヤーの合計値は#{player_answer}になりました"
+else ace == 1
+player = player
+end
+
+if  player_answer > 21
+    puts "プレイヤーはバーストした為、勝負に負けました"
+    exit
+end
+
+#ここまではエース対策（1or11）↑
+
+
+#ここからディーラーが17点以上になるまでカードを引くとこ↓
+
+dealer2 = trump10.sample
+puts "ディーラーの2枚目のカードは#{marks.sample}の#{dealer2}です"
+
+#ここからディーラーがエース引いた処理(2枚の時)↓
+d_ace = dealer == 1 || dealer2 == 1
+if  dealer + dealer2 <= 10 && d_ace 
+dealer2 += 10
+elsif dealer + dealer2 == 11 && d_ace
+dealer2 += 10
+end
+
+#ここまでディーラーがエース引いた処理(2枚の時)↑
+
+
+
+dealer3 = trump10.sample
+if dealer + dealer2 < 17
+puts "ディーラーの次のカードは#{marks.sample}の#{dealer3}です" 
+end
+
+
+#ここからディーラーがエース引いた処理(3枚目の時)↓
+if dealer + dealer2 + dealer3 <= 10 && dealer3 == 1
+dealer3 += 10
+end
+#ここまでディーラーがエース引いた処理(3枚目の時)↑
+
+
+while  dealer3 < 17 - dealer - dealer2 
+d_point = dealer3
+    dealer3 += trump10.sample
+puts "ディーラーの次のカードは#{marks.sample}の#{dealer3 - d_point}です" 
+d_next_card = dealer3 - d_point
+end
+
+
+#ここからディーラーがエース引いた処理（4枚目）↓
+
+
+if  d_next_card == 1 && dealer + dealer2 + dealer3 + d_next_card <= 10
+dealer3 += 10
+end
+
+#ここまでディーラーがエース引いた処理（4枚目）↑
+
+puts "ディーラーの1枚目のカードは#{dealer}だったので"
+if  dealer + dealer2 >= 17
+puts "ディーラーの合計値は#{dealer + dealer2 }です"
+dealer_answer = dealer + dealer2
+else
+puts "ディーラーの合計値は#{dealer + dealer2 + dealer3}です"
+dealer_answer = dealer + dealer2 + dealer3
+end
+
+#ここまでがディーラーが17点以上になるまでカードを引くとこ↑
+
+  
+
+#ここから勝利条件
+
+if dealer_answer >= 22
+puts "ディーラーはバーストした為、プレイヤーが勝利しました"
+elsif dealer_answer == 21 && player_answer == 21
+puts "双方がブラックジャックの為、勝負は引き分けです"
+elsif player_answer == dealer_answer
+puts "双方が同点な為、勝負は引き分けです"
+elsif player_answer < dealer_answer
+puts "プレイヤーlose"
+else 
+puts "プレイヤーwin"
+end
+
+
+    
+ 
